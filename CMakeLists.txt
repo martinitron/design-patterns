@@ -8,7 +8,7 @@ add_subdirectory(source)
 
 add_executable(DesignPatterns
 main.cpp
-)
+ "include/selfRegisteringFactory/jsonFileConverter.h" )
 
 target_include_directories(DesignPatterns PUBLIC "${CMAKE_SOURCE_DIR}/include")
-target_link_libraries(DesignPatterns patterns)
+target_link_libraries(DesignPatterns srfl converters)
