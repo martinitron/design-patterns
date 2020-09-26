@@ -8,10 +8,11 @@ int
 main(int argc, char** argv) {
 	std::cout << "Hello World!\n";
 	
-	FileConverter* converter = gFactory.createByExtension(".tif");
-	if (converter) {
-		converter->Import("this_file.tif");
-		converter->Export("that_file.tif");
+	FileConverter* converter = gFactory.createByExtension(".json");
+    
+	if (converter != nullptr) {
+		converter->Import("this_file.json");
+		converter->Export("that_file.json");
 		delete converter;
 	}
 

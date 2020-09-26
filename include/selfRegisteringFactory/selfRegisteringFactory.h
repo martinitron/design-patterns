@@ -12,7 +12,7 @@ class FileConverter;
 
 class Factory {
 private:
-	std::unique_ptr<std::vector<const FileConverterProxyBase*>> v_ = nullptr;
+	std::vector<const FileConverterProxyBase*>* v_ = nullptr;
 
 	void Init();
 
@@ -20,9 +20,11 @@ protected:
 public:
 	Factory() = default;
 	Factory(const Factory&) = default;
-	~Factory() = default;
+	~Factory();
 
-	FileConverter* createByExtension(const char*);
+	FileConverter* createByExtension(std::string&);
+    FileConverter* createByExtension(std::string&&);
+    
 	void register_converter(const FileConverterProxyBase*);
 };
 
