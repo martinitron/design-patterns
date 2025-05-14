@@ -9,7 +9,7 @@ protected:
 public:
 	FileConverter() = default;
 	FileConverter(const FileConverter&) = default;
-	~FileConverter() = default;
+	virtual ~FileConverter() = default;
 
 	virtual void Import(const std::string&) = 0;
 	virtual void Export(const std::string&) = 0;

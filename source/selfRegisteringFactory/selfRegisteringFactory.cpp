@@ -11,15 +11,21 @@
 
 Factory gFactory;
 
+std::vector<const FileConverterProxyBase*>* Factory::v_ = nullptr;
+
 namespace {
     
 #include <cctype>
 bool compareChar(char & c1, char & c2)
 {
     if (c1 == c2)
+    {
         return true;
+    }
     else if (std::toupper(c1) == std::toupper(c2))
+    {
         return true;
+    }
     return false;
 }
 /*
@@ -33,30 +39,54 @@ bool caseInSensStringCompare(std::string &str1, std::string &str2)
     
 }
 
-Factory::~Factory() {
-    delete v_;
+Factory::Factory()
+{
+    std::cout << "Generating Factory instance\n";
+    // Factory::v_ = nullptr;
 }
 
-void Factory::Init() {
-    if (v_ == nullptr) {
-        v_ = new std::vector<const FileConverterProxyBase*>;
+Factory::~Factory()
+{
+    std::cout << "Deleting ConverterProxy Vector\n";
+    // delete Factory::v_;
+}
+
+void Factory::Init()
+{
+    if (Factory::v_ == nullptr) {
+        std::cout << "Initialising ConverterProxy Vector\n";
+        Factory::v_ = new std::vector<const FileConverterProxyBase*>();
     }
 }
 
-void Factory::register_converter(const FileConverterProxyBase* c) {
+void Factory::register_converter(const FileConverterProxyBase* c)
+{
+    // std::cout << "Registering ConverterProxy " << c->getExtension() << "\n";
     Init();
-    v_->push_back(c);
+    Factory::v_->push_back(c);
+    std::cout << "v_ size: " << Factory::v_->size() << "\n";
 }
 
-FileConverter* Factory::createByExtension(std::string&& ext) {
+FileConverter* Factory::createByExtension(std::string&& ext)
+{
     return createByExtension(ext);
 }
 
-FileConverter* Factory::createByExtension(std::string& ext) {
-    for (unsigned i = 0; i < v_->size(); i++) {
-        std::string i_ext = v_->at(i)->getExtension();
-        if (caseInSensStringCompare(i_ext, ext)) {
-            return v_->at(i)->createObject();
+FileConverter* Factory::createByExtension(std::string& ext)
+{
+    std::cout << "creating converter for extension: " << ext << "\n";
+
+    if (Factory::v_ == nullptr) { /*throw std::runtime_error("v_ not allocated");*/ return nullptr; }
+
+    if (! Factory::v_->size()) { throw std::runtime_error("v_ has size 0"); }
+
+    for (unsigned i = 0; i < Factory::v_->size(); i++) 
+    {
+        std::string i_ext = Factory::v_->at(i)->getExtension();
+        std::cout << "checking against converter for extension: " << i_ext << "\n";
+        if (caseInSensStringCompare(i_ext, ext)) 
+        {
+            return Factory::v_->at(i)->createObject();
         }
     }
     return nullptr;

@@ -11,9 +11,10 @@ class FileConverterProxyBase {
 private:
 protected:
 public:
-	FileConverterProxyBase() { gFactory.register_converter(this); }
-	//FileConverterProxyBase();
-	~FileConverterProxyBase() = default;
+	FileConverterProxyBase(const FileConverterProxyBase* ptr) { gFactory.register_converter(ptr); }
+	FileConverterProxyBase() = delete;
+	
+	virtual ~FileConverterProxyBase() = default;
 
 	virtual FileConverter* createObject() const = 0;
 	virtual std::string getExtension() const = 0;

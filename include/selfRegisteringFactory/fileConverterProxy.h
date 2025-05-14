@@ -8,10 +8,17 @@
 #include "selfRegisteringFactory/fileConverter.h"
 
 template <class T>
-class FileConverterProxy : public FileConverterProxyBase{
-	FileConverter* createObject() const { return new T; }
-	std::string getExtension() const { return T::getExtension(); }
-	bool isCompressed() const { return T::isCompressed(); }
+class FileConverterProxy : public FileConverterProxyBase
+{
+private:
+protected:
+public:
+	FileConverterProxy() : FileConverterProxyBase(this) {}
+	virtual FileConverter* createObject() const final { return new T; } 
+	virtual std::string getExtension() const final { return T::getExtension(); } 
+	virtual bool isCompressed() const final { return T::isCompressed(); } 
+
+	virtual ~FileConverterProxy() override = default;
 };
 
 #endif

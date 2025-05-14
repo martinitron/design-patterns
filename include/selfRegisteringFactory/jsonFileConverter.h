@@ -7,10 +7,14 @@
 #include "selfRegisteringFactory/fileConverterProxy.h"
 #include "selfRegisteringFactory/fileConverter.h"
 
+#include <iostream>
+
 class JSONFileConverter : public FileConverter {
 private:
 protected:
 public:
+
+	JSONFileConverter() {std::cout << "Creating JSONFileConverter()\n";}
 	static std::string getExtension();
 	static bool  isCompressed();
 
@@ -21,6 +25,6 @@ public:
 	void Export(const std::string&&);
 };
 
-//static FileConverterProxy<JSONFileConverter> gJSONProxy;
+static FileConverterProxy<JSONFileConverter> gJSONProxy;
 
 #endif
